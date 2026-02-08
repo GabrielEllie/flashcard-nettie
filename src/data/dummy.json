@@ -1,0 +1,62 @@
+[
+    {
+        "id":1,
+        "name":"meowzies 1",
+        "flashcards": [
+            {
+                "id":1,
+                "question":"when does meow meow meow?",
+                "image":"menu.png",
+                "answer":"Nyaaaa ichi ni san"
+            },
+            {
+                "id":2,
+                "question":"why chicken cross",
+                "image":"menu.png",
+                "answer":"cuz "
+            },
+            {
+                "id":3,
+                "question":"when does meow meow meow?",
+                "image":"menu.png",
+                "answer":"Nyaaaa ichi ni san"
+            },
+            {
+                "id":4,
+                "question":"when does meow meow meow?",
+                "image":"menu.png",
+                "answer":"Nyaaaa ichi ni san"
+            }
+        ]
+    },
+    {
+        "id":2,
+        "name":"cat 2",
+        "flashcards": [
+            {
+                "id":1,
+                "question":"when does meow meow meow?",
+                "image":"menu.png",
+                "answer":"Nyaaaa ichi ni san"
+            },
+            {
+                "id":2,
+                "question":"why chicken cross",
+                "image":"menu.png",
+                "answer":"cuz "
+            },
+            {
+                "id":3,
+                "question":"when does meow meow meow?",
+                "image":"menu.png",
+                "answer":"Nyaaaa ichi ni san"
+            },
+            {
+                "id":4,
+                "question":"when does meow meow meow?",
+                "image":"menu.png",
+                "answer":"Nyaaaa ichi ni san"
+            }
+        ]
+    }
+]
