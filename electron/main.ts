@@ -32,8 +32,10 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       devTools: true, 
-      contextIsolation: true
-    }
+      contextIsolation: true,
+    },
+    minWidth: 1100,
+    minHeight: 600,
   })
 
   win.webContents.openDevTools();

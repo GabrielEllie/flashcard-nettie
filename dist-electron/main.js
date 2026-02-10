@@ -17,7 +17,9 @@ function createWindow() {
       preload: path.join(__dirname$1, "preload.mjs"),
       devTools: true,
       contextIsolation: true
-    }
+    },
+    minWidth: 1100,
+    minHeight: 600
   });
   win.webContents.openDevTools();
   win.webContents.on("did-finish-load", () => {
