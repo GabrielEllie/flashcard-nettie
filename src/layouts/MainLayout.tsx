@@ -36,7 +36,7 @@ export default function MainLayout() {
         <nav>
             {sidebar &&
             <div className='fixed w-full h-full bg-black/70 z-[998]'>
-                <ul className='animate-spin animate-once fixed flex flex-col w-[200px] rounded-r-xl top-0 left-0 z-[999] h-full bg-cyan-200 backdrop-blur-xl shadow-2xl pt-4' style={{ animationDuration: "0.5s" }}>
+                <ul className='animate-fade-right animate-duration-500 fixed flex flex-col w-[200px] rounded-r-xl top-0 left-0 z-[999] h-full bg-blue-600 backdrop-blur-xl shadow-2xl pt-4' style={{ animationDuration: "0.5s" }}>
                     <li className='flex w-full px-3'>
                         <button onClick={closeSidebar} className='p-1 border-2 border-transparent hover:border-orange-300 rounded-xl'>
                             <img src='/menu.png' width='35'/>
@@ -54,14 +54,14 @@ export default function MainLayout() {
                         <Link to="/SetList" 
                         className='flex flex-row items-center w-full p-2 border-2 border-transparent hover:border-orange-300 rounded-xl'
                         onClick={closeSidebar}>
-                            <img src='/cardstack.png' width='35'/>
+                            <img src='/card_stack.png' width='35'/>
                             <h2 className='pl-3'>Cards</h2>
                         </Link>
                     </li>
                 </ul>
             </div>
             }
-        <div className='z-50 fixed pl-[5px] flex top-0 bg-cyan-200 h-20 items-center justify-start w-full list-none align-center drop-shadow-md'>
+        <div className='z-50 fixed pl-[5px] flex top-0 bg-blue-600 h-20 items-center justify-start w-full list-none align-center drop-shadow-md'>
                 <div className='flex items-center justify-center items-center w-[60px]'>
                     {header.backOrMenu == "menu" && (
                         <button 
@@ -79,10 +79,10 @@ export default function MainLayout() {
                     )}
                     
                 </div>
-                <h1 className='pl-2 text-xl font-bold'>{header.title}</h1>
+                <h1 className='pl-2 text-xl font-bold truncate max-w-[70%]'>{header.title}</h1>
             </div>
         </nav>
-        <div className="pt-[80px] flex justify-center">
+        <div key={pathname} className="pt-[80px] flex justify-center animate-fade-right animate-duration-500">
             <Outlet />
         </div>
     </div>
