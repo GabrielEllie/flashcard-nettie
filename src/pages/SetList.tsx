@@ -5,7 +5,8 @@ export default function SetList() {
   return (
     <div className="grid grid-cols-3 gap-6 p-2">
         {FlashcardSet.map((set) => (
-            <div className="h-[250px] w-[320px] p-4">
+            <div className="h-[250px] w-[320px] p-4"
+                key={set.id}>
                 <Link 
                 to={`/SelectedSet/${set.id}`}
                 className="relative inline-block w-full h-full z-5">
