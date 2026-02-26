@@ -18,6 +18,8 @@ function createWindow() {
       devTools: true,
       contextIsolation: true
     },
+    width: 1100,
+    height: 600,
     minWidth: 1100,
     minHeight: 600
   });

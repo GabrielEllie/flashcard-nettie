@@ -1,66 +1,75 @@
 import React, { useState } from 'react'
 import ConfirmModal from './ConfirmModal';
 import ImageUpload from './ImageUpload';
+import FlashcardLayout from '../layouts/FlashcardLayout';
 
 export default function AddCard({
-    cardLayout, 
     hideForm
     }:{
-    cardLayout:string; 
     hideForm:()=>void }) {
 
     const [isOpen, setIsOpen] = useState(false);
     const handleDelete = () => hideForm();
     const showIsOpen = () => setIsOpen(true);
 
-    const [title, setTitle] = useState("");
+    const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [leftSelectedImage, setLeftSelectedImage] = useState<File | null>(null);
+    const [rightSelectedImage, setRightSelectedImage] = useState<File | null>(null);
     
-    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => setTitle(event.target.value);
-    const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => setAnswer(event.target.value);
+    const handleQuestionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(event.target.value);
+    const handleAnswerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => setAnswer(event.target.value);
 
-    
+    //object-cover h-32 mr-2 rounded-lg aspect-square
     return (
-        <div className={`${cardLayout} h-full`}>
-            <ConfirmModal 
-                isOpen={isOpen} 
-                onClose={() => {
-                    setIsOpen(false)
-                }} 
-                onConfirm={handleDelete}
-                title="Confirm Discard"
-                message="Are you sure you want to discard?"/>
-            <form className="w-full">
-                <div>
-                    <input 
-                        className="w-full p-2 text-lg bg-blue-800 rounded-xl"
-                        placeholder="Title"
-                        value={title}
-                        onChange={handleTitleChange}/>
-                    <input
-                        className="w-full p-2 mt-4 text-lg bg-blue-800 rounded-xl"
-                        placeholder="Answer"
-                        value={answer}
-                        onChange={handleAnswerChange}/>
-                </div>
-                <div className='flex flex-row w-full h-full'>
-                    <ImageUpload onChange={setSelectedImage}/>
-                    <div className="flex pt-4 w-full h-full">
+    <form className='flex justify-center w-full'>
+        <ConfirmModal 
+            isOpen={isOpen} 
+            onClose={() => {
+                setIsOpen(false)
+            }} 
+            onConfirm={handleDelete}
+            title="Confirm Discard"
+            message="Are you sure you want to discard?"
+        />
+        <FlashcardLayout
+            variant="add" 
+            // selectedIds={["1", "2", "3"]}
+            leftImage={<ImageUpload onChange={setLeftSelectedImage}/>}
+            leftDetails={
+                <textarea 
+                    value={question}
+                    placeholder="Question"
+                    onChange={handleQuestionChange}
+                    className="w-full h-40 p-2 font-thin text-white bg-blue-700 resize-none text-md rounded-xl" 
+                />
+            }
+            rightImage={<ImageUpload onChange={setRightSelectedImage}/>}
+            rightDetails={
+                <textarea
+                    value={answer}
+                    placeholder="Answer"
+                    onChange={handleAnswerChange}
+                    className="w-full h-40 p-2 font-thin text-white bg-blue-700 resize-none text-md rounded-xl"
+                />
+            }
+            footerShow={true}
+            footerElement={
+                <div className="flex justify-end w-full h-full pt-4 pr-6">
+                    <button 
+                        type="button"
+                        onClick={showIsOpen}
+                        className="p-2 font-bold text-blue-600 bg-white w-fit rounded-xl">
+                        Discard
+                    </button>
                         <button 
-                            type="button"
-                            onClick={showIsOpen}
-                            className="p-2 font-bold text-blue-600 bg-white w-fit rounded-xl">
-                            Discard
-                        </button>
-                            <button 
-                            onClick={hideForm}
-                            className="p-2 ml-4 font-bold bg-blue-800 w-fit rounded-xl">    
-                            Save
-                        </button>
-                    </div>
+                        onClick={hideForm}
+                        className="p-2 ml-4 font-bold bg-blue-800 w-fit rounded-xl">    
+                        Save
+                    </button>
                 </div>
-            </form>
-        </div>
+        }
+        />
+    </form>
     );
 }

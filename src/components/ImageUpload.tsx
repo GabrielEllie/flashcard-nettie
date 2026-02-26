@@ -25,9 +25,8 @@ export default function ImageUpload({ onChange }: ImageUploadProps) {
     if (!e.dataTransfer.files?.length) return;
     handleFile(e.dataTransfer.files[0]);
   };
-
   return (
-    <div className="flex flex-col items-center gap-2 w-full p-3">
+    <div className="flex flex-col items-center gap-2 pr-2">
       <input
         type="file"
         ref={inputRef}
@@ -36,7 +35,7 @@ export default function ImageUpload({ onChange }: ImageUploadProps) {
       />
 
       <div
-        className="w-64 h-40 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100 transition"
+        className="flex items-center justify-center w-40 h-40 transition border-2 border-gray-700 border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
@@ -45,10 +44,10 @@ export default function ImageUpload({ onChange }: ImageUploadProps) {
           <img
             src={preview}
             alt="Preview"
-            className="max-h-full max-w-full object-contain"
+            className="object-contain max-w-full max-h-full"
           />
         ) : (
-          <p className="text-gray-500 text-center">Drag image or click to upload</p>
+          <p className="font-bold text-center text-gray-700">Drag image or click to upload</p>
         )}
       </div>
     </div>
