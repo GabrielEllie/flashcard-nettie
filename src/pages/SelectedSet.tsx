@@ -3,7 +3,7 @@ import sets from "../data/dummy.json" //temp
 import { useState } from "react";
 import AddCard from "../components/AddCard";
 import FlashcardLayout from "../layouts/FlashcardLayout";
-import ImageUpload from "../components/ImageUpload";
+import EditCard from "../components/EditCard";
 
 type variantMode = "view" | "add" | "edit";
 
@@ -31,7 +31,7 @@ export default function SelectedSet() {
     return <h1>No Flashcard Set Selected</h1>
   }
   return (
-    <div className="grid grid-cols-1 gap-6 p-5 place-items-center">
+    <div className="grid w-full grid-cols-1 gap-6 p-5 place-items-center">
       {form ? (
         <AddCard hideForm={hideForm}/>
       ) : (
@@ -48,7 +48,8 @@ export default function SelectedSet() {
               
       {currentSet.flashcards.map((card) => (
         (selectedIds.includes(card.id) ?
-          <button onClick={() => removeId(card.id)}>selected</button>
+          <EditCard card={card} removeId={() => removeId(card.id)} />
+          // <p>selected</p>
           : 
           <FlashcardLayout
           variant="view" 

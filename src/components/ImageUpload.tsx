@@ -1,18 +1,35 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface ImageUploadProps {
   onChange?: (file: File) => void;
+  existingImage?: string | null;
 }
 
-export default function ImageUpload({ onChange }: ImageUploadProps) {
-  const [preview, setPreview] = useState<string | null>(null);
+export default function ImageUpload({ onChange, existingImage = null } : ImageUploadProps) {
+  const [preview, setPreview] = useState<string | null>(existingImage);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  useEffect(() => {
+    setPreview(existingImage);
+    if (inputRef.current) inputRef.current.value = "";
+  }, [existingImage]) ;
+
+  useEffect(() => {
+    return () => {
+      if (preview?.startsWith("blob:")) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
   const handleFile = (file: File) => {
-    console.log(file);
+    // console.log(file);
+    setPreview((prev) => {
+      if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return prev;
+    });
+
     const url = URL.createObjectURL(file);
     setPreview(url);
-    onChange?.(file); // send file to parent
+    onChange?.(file);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +42,13 @@ export default function ImageUpload({ onChange }: ImageUploadProps) {
     if (!e.dataTransfer.files?.length) return;
     handleFile(e.dataTransfer.files[0]);
   };
+
+  // const clearImage = () => {
+  //   setPreview(null);
+  //   if (inputRef.current) inputRef.current.value = "";
+  //   onChange?.(null);
+  // };
+  
   return (
     <div className="flex flex-col items-center gap-2 pr-2">
       <input

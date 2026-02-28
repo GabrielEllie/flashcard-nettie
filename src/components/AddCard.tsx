@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ConfirmModal from './ConfirmModal';
 import ImageUpload from './ImageUpload';
 import FlashcardLayout from '../layouts/FlashcardLayout';
+import { Card } from '../type/Flashcard';
 
 export default function AddCard({
     hideForm
@@ -20,6 +21,15 @@ export default function AddCard({
     const handleQuestionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(event.target.value);
     const handleAnswerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => setAnswer(event.target.value);
 
+    const handleSubmit = () => {
+        const newcard : Card = {
+            "id": crypto.randomUUID(),
+            "question": "",
+            "questionImage": "",
+            "answer": "",
+            "answerImage": "", 
+        }
+    }
     //object-cover h-32 mr-2 rounded-lg aspect-square
     return (
     <form className='flex justify-center w-full'>
@@ -63,6 +73,7 @@ export default function AddCard({
                         Discard
                     </button>
                         <button 
+                        type="submit"
                         onClick={hideForm}
                         className="p-2 ml-4 font-bold bg-blue-800 w-fit rounded-xl">    
                         Save

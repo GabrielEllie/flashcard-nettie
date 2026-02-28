@@ -1,5 +1,5 @@
 export type Card = {
-    id?: string;
+    id: string;
     question?: string;
     questionImage?: string;
     answer?: string;
@@ -7,6 +7,7 @@ export type Card = {
 }
 
 export type FlashcardSet = {
+    id:string;
     name?:string;
     flashcards?: Card[];
 }
