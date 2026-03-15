@@ -35,12 +35,12 @@ export default function EditCard({
             className="w-full h-40 p-2 font-thin text-white bg-blue-700 resize-none text-md rounded-xl" 
           />
         }
-        // rightImage={<ImageUpload onChange={setRightSelectedImage} existingImage={card.questionImage}} 
+        // rightImage={<ImageUpload onChange={setRightSelectedImage} existingImage={card.questionImage}} www
         rightImage={<ImageUpload onChange={setRightSelectedImage} existingImage={card.answerImage} />}
         rightDetails={
           <textarea 
             value={answer}
-            placeholder="Answer"
+            placeholder="Answer" 
             onChange={handleAnswerChange}
             className="w-full h-40 p-2 font-thin text-white bg-blue-700 resize-none text-md rounded-xl" 
           />

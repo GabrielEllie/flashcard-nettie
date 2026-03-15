@@ -1,20 +1,29 @@
 import { useLocation, useParams } from "react-router-dom";
-import sets from "../data/dummy.json" //temp
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { useSets } from "../context/SetsContext"
+
 import AddCard from "../components/AddCard";
 import FlashcardLayout from "../layouts/FlashcardLayout";
 import EditCard from "../components/EditCard";
+import { FlashcardSet } from "../type/Flashcard";
 
 type variantMode = "view" | "add" | "edit";
 
 export default function SelectedSet() {
+  const { getSet } = useSets();
   const { id } = useParams();
   const [form, setForm] = useState(false);
   const showForm = () => setForm(true);
   const hideForm = () => setForm(false);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  
-  let currentSet = sets.find(s => s.id === id);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]); 
+  const [currentSet, setCurrentSet] = useState<FlashcardSet | null>();
+
+  useEffect(() => {
+    if (id) {
+      setCurrentSet(getSet(id));
+    }
+  }, [id]);
 
   const addId = (id: string) => {
     setSelectedIds(prev =>
@@ -46,7 +55,7 @@ export default function SelectedSet() {
       </button>
       )}
               
-      {currentSet.flashcards.map((card) => (
+      {currentSet.flashcards?.map((card) => (
         (selectedIds.includes(card.id) ?
           <EditCard card={card} removeId={() => removeId(card.id)} />
           // <p>selected</p>

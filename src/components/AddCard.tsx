@@ -21,18 +21,31 @@ export default function AddCard({
     const handleQuestionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => setQuestion(event.target.value);
     const handleAnswerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => setAnswer(event.target.value);
 
-    const handleSubmit = () => {
+    const convertToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+        });
+    }
+    
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log(leftSelectedImage);
+        console.log(rightSelectedImage);
+
         const newcard : Card = {
             "id": crypto.randomUUID(),
-            "question": "",
-            "questionImage": "",
+            "question": question,
+            "questionImage": ,
             "answer": "",
             "answerImage": "", 
         }
     }
     //object-cover h-32 mr-2 rounded-lg aspect-square
     return (
-    <form className='flex justify-center w-full'>
+    <form className='flex justify-center w-full' onSubmit={handleSubmit}>
         <ConfirmModal 
             isOpen={isOpen} 
             onClose={() => {
@@ -74,7 +87,7 @@ export default function AddCard({
                     </button>
                         <button 
                         type="submit"
-                        onClick={hideForm}
+                        // onClick={hideForm}
                         className="p-2 ml-4 font-bold bg-blue-800 w-fit rounded-xl">    
                         Save
                     </button>
