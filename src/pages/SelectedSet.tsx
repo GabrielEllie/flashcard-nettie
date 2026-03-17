@@ -1,7 +1,7 @@
 import { useLocation, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-import { useSets } from "../context/SetsContext"
+import { useSets } from "../context/SetsContext";
 
 import AddCard from "../components/AddCard";
 import FlashcardLayout from "../layouts/FlashcardLayout";
@@ -11,7 +11,7 @@ import { FlashcardSet } from "../type/Flashcard";
 type variantMode = "view" | "add" | "edit";
 
 export default function SelectedSet() {
-  const { getSet } = useSets();
+  const { flashcardSets } = useSets();
   const { id } = useParams();
   const [form, setForm] = useState(false);
   const showForm = () => setForm(true);
@@ -21,9 +21,9 @@ export default function SelectedSet() {
 
   useEffect(() => {
     if (id) {
-      setCurrentSet(getSet(id));
+      setCurrentSet(flashcardSets.find(set => set.id === id)) ?? null;
     }
-  }, [id]);
+  }, [id, flashcardSets]);
 
   const addId = (id: string) => {
     setSelectedIds(prev =>
@@ -42,7 +42,7 @@ export default function SelectedSet() {
   return (
     <div className="grid w-full grid-cols-1 gap-6 p-5 place-items-center">
       {form ? (
-        <AddCard hideForm={hideForm}/>
+        <AddCard setId={id ?? ""} hideForm={hideForm}/>
       ) : (
       <button 
       onClick={showForm}
@@ -56,9 +56,9 @@ export default function SelectedSet() {
       )}
               
       {currentSet.flashcards?.map((card) => (
-        (selectedIds.includes(card.id) ?
+        <Fragment key={card.id}>
+          {selectedIds.includes(card.id) ?
           <EditCard card={card} removeId={() => removeId(card.id)} />
-          // <p>selected</p>
           : 
           <FlashcardLayout
           variant="view" 
@@ -72,8 +72,9 @@ export default function SelectedSet() {
               <img src="pencil.png" className="w-10 h-10"/> 
             </button>
           }
-        />
-        )))}
+          />}
+        </Fragment>
+      ))}
     </div>
   );
 }

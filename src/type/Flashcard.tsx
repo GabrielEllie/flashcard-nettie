@@ -7,7 +7,7 @@ export type Card = {
 }
 
 export type FlashcardSet = {
-    id:string;
-    name?:string;
+    id: string;
+    name?: string;
     flashcards?: Card[];
 }

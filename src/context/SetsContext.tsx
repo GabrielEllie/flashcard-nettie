@@ -7,6 +7,7 @@ type SetsContextType = {
     getSet: (id: string) => FlashcardSet | null;
     addSet: (newSet: FlashcardSet) => void;
     removeSet: (id: string) => void;
+    addFlashcard: (id: string, newFlashcard: Card) => void;
 }
 
 const SetsContext = createContext<SetsContextType | null>(null);
@@ -30,7 +31,7 @@ export const SetsProvider = ({children}:{children: React.ReactNode}) => {
             const exists = prev.some(set => set.id === newSet.id);
             if (exists) throw new Error("Duplicate set id");
             return [...prev, newSet];
-        })
+        });
     };
 
     // edit set by id
@@ -45,11 +46,18 @@ export const SetsProvider = ({children}:{children: React.ReactNode}) => {
 
     // add flashcard object inside a set which uses its id
     const addFlashcard = (setId:string, newFlashcard: Card) => {
-        return setId;
+        setFlashcardSets(prev =>
+            prev.map(set => (
+                set.id === setId ? 
+                { ...set, flashcards: [...set.flashcards ?? [], newFlashcard] } 
+                : 
+                set
+            ))
+        );
     }
 
     return(
-        <SetsContext.Provider value={{flashcardSets, getSet, addSet, removeSet}}>
+        <SetsContext.Provider value={{flashcardSets, getSet, addSet, removeSet, addFlashcard}}>
             {children}
         </SetsContext.Provider>
     );

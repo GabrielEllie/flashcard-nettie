@@ -9,19 +9,45 @@ export default function ImageUpload({ onChange, existingImage = null } : ImageUp
   const [preview, setPreview] = useState<string | null>(existingImage);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+
+  // Sets preview to existing image if prop is passed to this component
   useEffect(() => {
     setPreview(existingImage);
     if (inputRef.current) inputRef.current.value = "";
   }, [existingImage]) ;
 
+  // cleans up previous url preview
+  /* 
+    For self, REEMOVVVEEEEEEEEEEEEEE later:
+    example:
+    User selects file A
+    preview = blob:A
+    <img src="blob:A">
+
+    User selects file B
+    cleanup → revoke(blob:A)
+    preview = blob:B
+    <img src="blob:B">
+  */
   useEffect(() => {
     return () => {
       if (preview?.startsWith("blob:")) URL.revokeObjectURL(preview);
     };
   }, [preview]);
 
+  const validateImage = (file: File) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gift"];
+    const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+
+    const filename = file.name.toLowerCase();
+    const validExtension = allowedExtensions.some(ext => filename.endsWith(ext));
+    if (!allowedTypes.includes(file.type) || !validExtension) {
+        throw new Error("Only JPG, JPEG, PNG, or GIF files are allowed.");
+    }
+  } 
+
+  // just converts it to a readable url for img element
   const handleFile = (file: File) => {
-    // console.log(file);
     setPreview((prev) => {
       if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
       return prev;
@@ -33,14 +59,28 @@ export default function ImageUpload({ onChange, existingImage = null } : ImageUp
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return;
-    handleFile(e.target.files[0]);
+    const file = e.target.files;
+    if (!file) return;
+    try {
+      validateImage(file[0])
+    } catch (err) {
+      if (err instanceof Error) alert(err.message); //replace alert
+      return;
+    }
+    handleFile(file[0]);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (!e.dataTransfer.files?.length) return;
-    handleFile(e.dataTransfer.files[0]);
+    const file = e.dataTransfer.files;
+    if (!file) return;
+    try {
+      validateImage(file[0])
+    } catch (err) {
+      if (err instanceof Error) alert(err.message);
+      return;
+    }
+    handleFile(file[0]);
   };
 
   // const clearImage = () => {

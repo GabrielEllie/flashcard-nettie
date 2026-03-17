@@ -3,16 +3,26 @@ import ConfirmModal from './ConfirmModal';
 import ImageUpload from './ImageUpload';
 import FlashcardLayout from '../layouts/FlashcardLayout';
 import { Card } from '../type/Flashcard';
+import { useSets } from "../context/SetsContext";
+
+type addCardProps = {
+    hideForm: () => void;
+    setId: string;
+}
 
 export default function AddCard({
-    hideForm
-    }:{
-    hideForm:()=>void }) {
-
+    hideForm,
+    setId
+    }:
+    addCardProps
+    ) {
+    
+    const { addFlashcard } = useSets();
     const [isOpen, setIsOpen] = useState(false);
     const handleDelete = () => hideForm();
     const showIsOpen = () => setIsOpen(true);
 
+    // flashcard properties
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [leftSelectedImage, setLeftSelectedImage] = useState<File | null>(null);
@@ -22,26 +32,51 @@ export default function AddCard({
     const handleAnswerChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => setAnswer(event.target.value);
 
     const convertToBase64 = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
+        const convertedFile : Promise<string> = new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result as string);
             reader.onerror = reject;
-        });
+        })
+        return convertedFile;
     }
     
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(leftSelectedImage);
-        console.log(rightSelectedImage);
 
-        const newcard : Card = {
+        const questionImageToBase64 = leftSelectedImage ? await convertToBase64(leftSelectedImage) : "";
+        const answerImageToBase64 = rightSelectedImage ? await convertToBase64(rightSelectedImage) : "";
+        
+        // if(leftSelectedImage) console.log("This is base64:", await convertToBase64(leftSelectedImage));
+        // if(rightSelectedImage) console.log("This is base64:", await convertToBase64(rightSelectedImage));
+
+        const newCard : Card = {
             "id": crypto.randomUUID(),
             "question": question,
-            "questionImage": ,
-            "answer": "",
-            "answerImage": "", 
+            "questionImage": questionImageToBase64,
+            "answer": answer,
+            "answerImage": answerImageToBase64, 
         }
+
+        if ((newCard.question === "" && newCard.questionImage === "") && 
+            (newCard.answer === "" && newCard.answerImage === "")) {
+            return;
+        }
+
+        try {
+            addFlashcard(setId, newCard);
+        } catch (err) {
+            if (err instanceof Error) alert(err.message);
+        }
+        
+        setQuestion("");
+        setAnswer("");
+        setLeftSelectedImage(null);
+        setRightSelectedImage(null);
+        
+        hideForm();
+        alert("Item Added"); // replace with my own notification modal
+        
     }
     //object-cover h-32 mr-2 rounded-lg aspect-square
     return (
