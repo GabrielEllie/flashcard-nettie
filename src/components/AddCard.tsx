@@ -4,6 +4,8 @@ import ImageUpload from './ImageUpload';
 import FlashcardLayout from '../layouts/FlashcardLayout';
 import { Card } from '../type/Flashcard';
 import { useSets } from "../context/SetsContext";
+import Notification from './Notification';
+import { useNotification } from '../context/NotifContext';
 
 type addCardProps = {
     hideForm: () => void;
@@ -21,6 +23,7 @@ export default function AddCard({
     const [isOpen, setIsOpen] = useState(false);
     const handleDelete = () => hideForm();
     const showIsOpen = () => setIsOpen(true);
+    const { showNotification } = useNotification();
 
     // flashcard properties
     const [question, setQuestion] = useState("");
@@ -43,7 +46,7 @@ export default function AddCard({
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+        
         const questionImageToBase64 = leftSelectedImage ? await convertToBase64(leftSelectedImage) : "";
         const answerImageToBase64 = rightSelectedImage ? await convertToBase64(rightSelectedImage) : "";
         
@@ -68,15 +71,13 @@ export default function AddCard({
         } catch (err) {
             if (err instanceof Error) alert(err.message);
         }
-        
         setQuestion("");
         setAnswer("");
         setLeftSelectedImage(null);
         setRightSelectedImage(null);
         
         hideForm();
-        alert("Item Added"); // replace with my own notification modal
-        
+        showNotification("Card added successfully!", "green_check.png", 4000);
     }
     //object-cover h-32 mr-2 rounded-lg aspect-square
     return (
@@ -127,7 +128,7 @@ export default function AddCard({
                         Save
                     </button>
                 </div>
-        }
+            }
         />
     </form>
     );

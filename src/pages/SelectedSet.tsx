@@ -8,8 +8,6 @@ import FlashcardLayout from "../layouts/FlashcardLayout";
 import EditCard from "../components/EditCard";
 import { FlashcardSet } from "../type/Flashcard";
 
-type variantMode = "view" | "add" | "edit";
-
 export default function SelectedSet() {
   const { flashcardSets } = useSets();
   const { id } = useParams();
@@ -55,26 +53,29 @@ export default function SelectedSet() {
       </button>
       )}
               
-      {currentSet.flashcards?.map((card) => (
-        <Fragment key={card.id}>
-          {selectedIds.includes(card.id) ?
-          <EditCard card={card} removeId={() => removeId(card.id)} />
-          : 
-          <FlashcardLayout
-          variant="view" 
-          leftImage={<img src={card.questionImage} className="object-cover h-32 mr-2 rounded-lg aspect-square"/>}
-          leftDetails={<p className="font-thin break-words line-clamp-5 text-md">{card.question}</p>}
-          rightImage={<img src={card.answerImage} className="object-cover h-32 mr-2 rounded-lg aspect-square"/>}
-          rightDetails={<p className="font-thin break-words line-clamp-5 text-md">{card.answer}</p>}
-          rightButtonShow={true}
-          rightButtonElement={
-            <button onClick={() => addId(card.id)}>
-              <img src="pencil.png" className="w-10 h-10"/> 
-            </button>
-          }
-          />}
-        </Fragment>
-      ))}
+      {/* Render flashcards */}
+      {currentSet.flashcards?.map((card) => {
+        return (
+          <Fragment key={card.id}>
+            {selectedIds.includes(card.id) ?
+            <EditCard card={card} removeId={() => removeId(card.id)} />
+            : 
+            <FlashcardLayout
+            variant="view" 
+            leftImage={card.answerImage ? <img src={card.questionImage} className={`object-cover h-32 mr-2 rounded-lg aspect-square ${!card.answerImage ? "invisible" : ""}`}/> : null}
+            leftDetails={<p className="font-thin break-words line-clamp-5 text-md">{card.question}</p>}
+            rightImage={card.answerImage ? <img src={card.answerImage} className={`object-cover h-32 mr-2 rounded-lg aspect-square ${!card.answerImage ? "invisible" : ""}`}/> : null}
+            rightDetails={<p className="font-thin break-words line-clamp-5 text-md">{card.answer}</p>}
+            rightButtonShow={true}
+            rightButtonElement={
+              <button onClick={() => addId(card.id)}>
+                <img src="pencil.png" className="w-10 h-10"/> 
+              </button>
+            }
+            />}
+          </Fragment>
+        )})
+      }
     </div>
   );
 }

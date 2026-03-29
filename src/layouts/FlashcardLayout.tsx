@@ -3,10 +3,10 @@ type FlashcardLayoutProps = {
     // selectedIds: string[];
     variant: variantMode;
     
-    leftImage: React.ReactNode;
-    leftDetails: React.ReactNode;
-    rightImage: React.ReactNode;
-    rightDetails: React.ReactNode;
+    leftImage?: React.ReactNode;
+    leftDetails?: React.ReactNode | null;
+    rightImage?: React.ReactNode;
+    rightDetails?: React.ReactNode | null;
 
     footerShow?: boolean;
     footerElement?: React.ReactNode;
@@ -16,7 +16,7 @@ type FlashcardLayoutProps = {
 
 export default function FlashcardLayout({
     // selectedIds,
-    variant = "add",
+    variant = "view",
     leftImage,
     leftDetails,
     rightImage,
