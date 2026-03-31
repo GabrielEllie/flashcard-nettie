@@ -21,7 +21,7 @@ export default function AddCard({
     
     const { addFlashcard } = useSets();
     const [isOpen, setIsOpen] = useState(false);
-    const handleDelete = () => hideForm();
+    const handleDiscard = () => hideForm();
     const showIsOpen = () => setIsOpen(true);
     const { showNotification } = useNotification();
 
@@ -63,6 +63,7 @@ export default function AddCard({
 
         if ((newCard.question === "" && newCard.questionImage === "") && 
             (newCard.answer === "" && newCard.answerImage === "")) {
+            showNotification("Missing field(s)", "orange_warning.png", 4000);
             return;
         }
 
@@ -87,7 +88,7 @@ export default function AddCard({
             onClose={() => {
                 setIsOpen(false)
             }} 
-            onConfirm={handleDelete}
+            onConfirm={handleDiscard}
             title="Confirm Discard"
             message="Are you sure you want to discard?"
         />
@@ -118,13 +119,13 @@ export default function AddCard({
                     <button 
                         type="button"
                         onClick={showIsOpen}
-                        className="p-2 font-bold text-blue-600 bg-white w-fit rounded-xl">
+                        className="p-2 font-bold text-blue-600 bg-white hover:bg-gray-400 w-fit rounded-xl">
                         Discard
                     </button>
                         <button 
                         type="submit"
                         // onClick={hideForm}
-                        className="p-2 ml-4 font-bold bg-blue-800 w-fit rounded-xl">    
+                        className="p-2 ml-4 font-bold bg-blue-800 hover:bg-blue-900 w-fit rounded-xl">    
                         Save
                     </button>
                 </div>

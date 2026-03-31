@@ -8,6 +8,8 @@ type SetsContextType = {
     addSet: (newSet: FlashcardSet) => void;
     removeSet: (id: string) => void;
     addFlashcard: (id: string, newFlashcard: Card) => void;
+    editFlashcard: (id: string, newFlashcard: Card) => void;
+    deleteFlashcard: (setId: string, cardId: string) => void;
 }
 
 const SetsContext = createContext<SetsContextType | null>(null);
@@ -34,11 +36,6 @@ export const SetsProvider = ({children}:{children: React.ReactNode}) => {
         });
     };
 
-    // edit set by id
-    const editSet = (setId: string) => {
-        return setId;
-    };
-
     // remove set by id
     const removeSet = (setId:string) => {
         setFlashcardSets(prev => prev.filter(set => set.id !== setId));
@@ -52,12 +49,34 @@ export const SetsProvider = ({children}:{children: React.ReactNode}) => {
                 { ...set, flashcards: [...set.flashcards ?? [], newFlashcard] } 
                 : 
                 set
-            ))
+            )
+        ));
+    };
+
+    // edit set by id
+    const editFlashcard = (setId: string | undefined, updatedCard: Card) => {
+        console.log(updatedCard);
+        if (setId === undefined) throw new Error("Set ID is required to edit flashcard")
+        setFlashcardSets(prev => 
+            prev.map(set =>
+                set.id === setId ? { ...set, flashcards: 
+                    set.flashcards?.map(card => card.id === updatedCard.id ? { ...card, ...updatedCard } : card) 
+                } : set
+            )
         );
-    }
+    };
+
+    const deleteFlashcard = (setId: string, cardId: string) => {
+        setFlashcardSets(prev =>
+            prev.map(set =>
+                set.id === setId ? { ...set, flashcards: set.flashcards?.filter(card => card.id !== cardId) } : set
+            )
+        );
+    };
+
 
     return(
-        <SetsContext.Provider value={{flashcardSets, getSet, addSet, removeSet, addFlashcard}}>
+        <SetsContext.Provider value={{flashcardSets, getSet, addSet, removeSet, addFlashcard, editFlashcard, deleteFlashcard}}>
             {children}
         </SetsContext.Provider>
     );
